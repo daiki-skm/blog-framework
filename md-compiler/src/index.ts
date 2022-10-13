@@ -10,4 +10,6 @@ const convertToHTMLString = (markdown: string) => {
   return htmlString;
 };
 
-console.log(convertToHTMLString("normal**bold**"));
+// console.log(convertToHTMLString("normal**bold**"));
+console.log(convertToHTMLString("* list1"));
+// console.log(convertToHTMLString("* list1\n* list2"));

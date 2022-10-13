@@ -2,6 +2,7 @@ import {
   genStrongElement,
   genTextElement,
   matchWithStrongRegxp,
+  matchWithListRegxp,
 } from "./lexer.ts";
 import { Token } from "./models/token.ts";
 
@@ -13,6 +14,9 @@ const rootToken: Token = {
 };
 
 export const parse = (markdownRow: string) => {
+  if (matchWithListRegxp(markdownRow)) {
+    return _tokenizeList(markdownRow);
+  }
   return _tokenizeText(markdownRow);
 };
 
@@ -65,4 +69,35 @@ const _tokenizeText = (
 
   _tokenize(textElement, parent);
   return elements;
+};
+
+export const _tokenizeList = (listString: string) => {
+  const UL = "ul";
+  const LIST = "li";
+
+  let id = 1;
+  const roorUlToken: Token = {
+    id,
+    elmType: UL,
+    content: "",
+    parent: rootToken,
+  };
+  let parent = roorUlToken;
+  let tokens: Token[] = [roorUlToken];
+  const match = matchWithListRegxp(listString) as RegExpMatchArray;
+  console.log("match", match);
+
+  id += 1;
+  const listToken: Token = {
+    id,
+    elmType: LIST,
+    content: "",
+    parent,
+  };
+  tokens.push(listToken);
+  const listText: Token[] = _tokenizeText(match[3], id, listToken);
+  console.log("listText", listText);
+  id += listText.length;
+  tokens.push(...listText);
+  return tokens;
 };

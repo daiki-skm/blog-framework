@@ -16,6 +16,7 @@ const _getInsertPosition = (content: string) => {
   let state = 0;
   const closeTagParentheses = ["<", ">"];
   let position = 0;
+  console.log("content", content);
   content.split("").some((c, i) => {
     if (state === 1 && c === closeTagParentheses[state]) {
       position = i;
@@ -33,6 +34,12 @@ const _createMergedContent = (
 ) => {
   let content = "";
   switch (parentToken.elmType) {
+    case "li":
+      content = `<li>${currentToken.content}</li>`;
+      break;
+    case "ul":
+      content = `<ul>${currentToken.content}</ul>`;
+      break;
     case "strong":
       content = `<strong>${currentToken.content}</strong>`;
       break;
