@@ -84,20 +84,26 @@ export const _tokenizeList = (listString: string) => {
   };
   let parent = roorUlToken;
   let tokens: Token[] = [roorUlToken];
-  const match = matchWithListRegxp(listString) as RegExpMatchArray;
-  console.log("match", match);
+  listString
+    .split(/\r\n|\r|\n/)
+    .filter(Boolean)
+    .forEach((l) => {
+      const match = matchWithListRegxp(l) as RegExpMatchArray;
+      console.log("l", l);
+      console.log("match", match);
 
-  id += 1;
-  const listToken: Token = {
-    id,
-    elmType: LIST,
-    content: "",
-    parent,
-  };
-  tokens.push(listToken);
-  const listText: Token[] = _tokenizeText(match[3], id, listToken);
-  console.log("listText", listText);
-  id += listText.length;
-  tokens.push(...listText);
+      id += 1;
+      const listToken: Token = {
+        id,
+        elmType: LIST,
+        content: "",
+        parent,
+      };
+      tokens.push(listToken);
+      const listText: Token[] = _tokenizeText(match[3], id, listToken);
+      console.log("listText", listText);
+      id += listText.length;
+      tokens.push(...listText);
+    });
   return tokens;
 };
